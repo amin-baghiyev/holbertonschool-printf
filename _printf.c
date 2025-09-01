@@ -11,23 +11,23 @@
  */
 char *int_to_str(int integer)
 {
-	int copy;
+	long big_int;
 	unsigned int i;
 	char *str;
 
-	copy = integer;
-	for (i = 1; copy / 10 != 0; i++)
-		copy /= 10;
-	if (integer < 0)
+	big_int = integer;
+	for (i = 1; integer / 10 != 0; i++)
+		integer /= 10;
+	if (big_int < 0)
 		i++;
 	str = malloc((i + 1) * sizeof(char));
 	if (str == NULL)
 		return (NULL);
 	str[i] = '\0';
-	if (integer < 0)
-		str[0] = '-', integer = -integer;
+	if (big_int < 0)
+		str[0] = '-', big_int = -big_int;
 	for (; i > (str[0] == '-' ? 1 : 0); i--)
-		str[i - 1] = (integer % 10) + '0', integer /= 10;
+		str[i - 1] = (big_int % 10) + '0', big_int /= 10;
 	return (str);
 }
 
