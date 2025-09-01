@@ -1,6 +1,50 @@
 #include "main.h"
 #include <stdarg.h>
 #include <unistd.h>
+#include <stdlib.h>
+
+/**
+ * int_to_str - converts string to integer
+ * @integer: integer to string
+ *
+ * Return: string that represents integer
+ */
+char *int_to_str(int integer)
+{
+	int copy;
+	unsigned int i;
+	char *str;
+
+	copy = integer;
+	for (i = 1; copy / 10 != 0; i++)
+		copy /= 10;
+	if (integer < 0)
+		i++;
+	str = malloc((i + 1) * sizeof(char));
+	if (str == NULL)
+		return (NULL);
+	str[i] = '\0';
+	if (integer < 0)
+		str[0] = '-', integer = -integer;
+	for (; i > (str[0] == '-' ? 1 : 0); i--)
+		str[i - 1] = (integer % 10) + '0', integer /= 10;
+	return (str);
+}
+
+/**
+ * _strlen - retrieves length of string
+ * @str: string to compute length
+ *
+ * Return: length of str
+ */
+unsigned int _strlen(char *str)
+{
+	unsigned int j;
+
+	for (j = 0; str[j] != '\0'; j++)
+	;
+	return (j);
+}
 
 /**
  * _printf - custom printf
@@ -20,31 +64,29 @@ int _printf(const char *format, ...)
 	{
 		if (format[i + 1] == '\0' && format[i] == '%')
 			return (-1);
-		if (format[i] != '%' || (format[i + 1] != 'c' && format[i + 1] != 's'
-		&& format[i + 1] != '%' && format[i + 1] != '\0'))
+		if (format[i] != '%')
 			write(1, &format[i], 1);
-		else if (format[i + 1] != '\0' && format[i + 1] == 'c')
-		{
+		else if (format[i + 1] == 'c')
 			c = (char) va_arg(args, int), write(1, &c, 1), i++;
-		}
-		else if (format[i + 1] != '\0' && format[i + 1] == 's')
+		else if (format[i + 1] == 's')
 		{
-			i++;
-			str = va_arg(args, char *);
+			i++, str = va_arg(args, char *);
 			if (str == NULL)
 			{
 				write(1, "(null)", 6), count += 6;
 				continue;
 			}
-			for (j = 0; str[j] != '\0'; j++)
-			;
-			write(1, str, j);
-			count += (j - 1);
+			j = _strlen(str), write(1, str, j), count += (j - 1);
 		}
-		else if (format[i + 1] != '\0' && format[i + 1] == '%')
+		else if (format[i + 1] == 'd' || format[i + 1] == 'i')
 		{
-			i++, c = '%', write(1, &c, 1);
+			i++, str = int_to_str(va_arg(args, int));
+			if (str == NULL)
+				continue;
+			j = _strlen(str), write(1, str, j), count += (j - 1), free(str);
 		}
+		else if (format[i + 1] == '%')
+			i++, c = '%', write(1, &c, 1);
 		count++;
 	}
 	va_end(args);
