@@ -1,4 +1,4 @@
-.TH _PRINTF 3 "September 2025" "Holberton" "Library Functions Manual"
+.TH _PRINTF 3 "2025-09-06" "Holberton" "Library Functions Manual"
 .SH NAME
 _printf \- custom implementation of the C library printf function
 .SH SYNOPSIS
@@ -25,7 +25,25 @@ Print a percent sign.
 .SH RETURN VALUE
 Upon successful completion, _printf returns the number of characters printed.
 If an error occurs, such as an incomplete format specifier, the function returns -1.
+.SH EXAMPLES
+.TP
+Print a simple string:
+.EX
+_printf("Hello, world\n");
+.EE
+
+.TP
+Print integers:
+.EX
+_printf("Value: %d\n", 42);
+.EE
+
+.TP
+Mix specifiers:
+.EX
+_printf("Char: %c, String: %s\n", 'A', "text");
+.EE
 .SH SEE ALSO
 .BR printf (3)
 .SH AUTHORS
-Mahdi Taghizada <tagizademehti@gmail.com> , Amin Baghiyev
+Amin Baghiyev, Mahdi Taghizada
